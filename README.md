@@ -2,6 +2,12 @@
 
 ---
 
+## 👥 Contributors
+
+- [@Antoinemirloup](https://github.com/antoinemirloup)
+
+---
+
 ## About
 
 **Eyes-Cube** is a first-person 3D graphics engine inspired by **Wolfenstein 3D**. It is a raycasting-based game project, written in C, that renders a maze-like environment from a first-person perspective. The engine uses the **MiniLibX** graphical library for windowing and rendering, and it leverages a custom **libft** for common utility functions. The project implements the core features of the 42 school’s **Cub3D** assignment, with bonus enhancements such as interactive enemies and other extended gameplay elements.
