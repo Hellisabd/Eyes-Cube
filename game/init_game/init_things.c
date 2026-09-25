@@ -87,3 +87,31 @@ void	init_all(t_cub *cub)
 	cub->exit.success_i = NULL;
 	cub->exit.success_t = NULL;
 }
+
+void	init_mlx_window(t_cub *cub)
+{
+	int32_t	mon_w;
+	int32_t	mon_h;
+
+	cub->mlx = mlx_init(1280, 640, "cub3D", true);
+	if (!cub->mlx)
+		exit((print_error("Initializing MLX!\n"), EXIT_FAILURE));
+	mlx_get_monitor_size(0, &mon_w, &mon_h);
+	if (mon_w <= 0 || mon_h <= 0)
+	{
+		mon_w = 1920;
+		mon_h = 1080;
+	}
+	cub->width = mon_w * 9 / 10;
+	cub->height = cub->width / 2;
+	if (cub->height > mon_h * 9 / 10)
+	{
+		cub->height = mon_h * 9 / 10;
+		cub->width = cub->height * 2;
+	}
+	mlx_set_window_size(cub->mlx, cub->width, cub->height);
+	mlx_set_window_limit(cub->mlx, cub->width, cub->height, \
+		cub->width, cub->height);
+	mlx_set_window_pos(cub->mlx, (mon_w - cub->width) / 2, \
+		(mon_h - cub->height) / 2);
+}

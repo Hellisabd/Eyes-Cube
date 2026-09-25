@@ -18,7 +18,7 @@ void	maths_exit_2(t_cub *cub)
 		(cub->fov / cub->n));
 	cub->exit.ratio_width = (float)cub->exit.exit_i->width / \
 		(float)cub->exit.max_rays;
-	cub->exit.start = ((int)cub->exit.ratio - HEIGHT) / 2;
+	cub->exit.start = ((int)cub->exit.ratio - cub->height) / 2;
 	if (cub->exit.start < 0)
 		cub->exit.start = 0;
 }
@@ -29,7 +29,7 @@ void	maths_exit(t_cub *cub)
 	cub->exit.d_y = cub->p_y - cub->exit.e_y;
 	cub->exit.dist = fabs(sqrt((cub->exit.d_x * cub->exit.d_x) + \
 		(cub->exit.d_y * cub->exit.d_y)));
-	cub->exit.ratio = HEIGHT / cub->exit.dist;
+	cub->exit.ratio = cub->height / cub->exit.dist;
 	cub->exit.ratio_height = (float)cub->exit.exit_i->height / \
 		cub->exit.ratio;
 	if (cub->p_x >= cub->exit.e_x && cub->p_y >= cub->exit.e_y)
@@ -54,13 +54,13 @@ void	maths_exit(t_cub *cub)
 
 void	put_exit_2(t_cub *cub, int x, int y)
 {
-	while (y < HEIGHT)
+	while (y < cub->height)
 	{
 		mlx_put_pixel(cub->world.npc, x, y, 0);
 		y++;
 	}
 	cub->exit.n_ray++;
-	if (cub->exit.n_ray >= cub->exit.max_rays * 3)
+	if (cub->exit.n_ray >= cub->exit.max_rays * cub->col_ratio)
 		cub->exit.n_ray = 0;
 }
 
@@ -75,17 +75,18 @@ void	put_exit(t_cub *cub, t_ray *ray, int x)
 		- 2 * PI && ray->angle <= cub->exit.theta2 - 2 * PI)))
 	{
 		y = 0;
-		while (y < (HEIGHT - cub->exit.ratio + 50) / 2)
+		while (y < (cub->height - cub->exit.ratio + cub->height / 30) / 2)
 		{
 			mlx_put_pixel(cub->world.npc, x, y, 0);
 			y++;
 		}
 		while ((int)floor(cub->exit.line_tab) < \
-			(int)cub->exit.exit_i->height && y < HEIGHT)
+			(int)cub->exit.exit_i->height && y < cub->height)
 		{
 			mlx_put_pixel(cub->world.npc, x, y, \
-				(int)cub->exit.tab_exit[(int)(floor)(cub->exit.n_ray / 3 * \
-				cub->exit.ratio_width)][(int)floor(cub->exit.line_tab)]);
+				(int)cub->exit.tab_exit[(int)floor(cub->exit.n_ray / \
+				cub->col_ratio * cub->exit.ratio_width)] \
+				[(int)floor(cub->exit.line_tab)]);
 			y++;
 			cub->exit.line_tab += cub->exit.ratio_height;
 		}

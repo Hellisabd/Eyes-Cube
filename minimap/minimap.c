@@ -28,7 +28,7 @@ size_t	ft_strlen_custom(char *str)
 	return (count);
 }
 
-int	init_data_mini_map(t_mini_map *minimap, t_map *map)
+int	init_data_mini_map(t_mini_map *minimap, t_map *map, int win_h)
 {
 	int	i;
 
@@ -40,8 +40,8 @@ int	init_data_mini_map(t_mini_map *minimap, t_map *map)
 			map->max_length = ft_strlen_custom(map->map[i]);
 		i++;
 	}
-	minimap->size_wall_x = ceil(HEIGHT / (float)(map->max_length)) / 5;
-	minimap->size_wall_y = ceil(HEIGHT / (float)(i)) / 5;
+	minimap->size_wall_x = ceil(win_h / (float)(map->max_length)) / 5;
+	minimap->size_wall_y = ceil(win_h / (float)(i)) / 5;
 	minimap->width = minimap->size_wall_x * map->max_length;
 	minimap->height = minimap->size_wall_y * i;
 	return (0);
@@ -73,7 +73,7 @@ int	put_wall(t_map *map, t_cub *g)
 	map->i = -1;
 	while (map->map[++map->i])
 	{
-		map->pos_x = WIDTH - g->mini_map.width;
+		map->pos_x = g->width - g->mini_map.width;
 		map->j = 0;
 		while (map->map[map->i][map->j] && map->map[map->i][map->j] != '\n')
 		{
@@ -98,8 +98,8 @@ int	map_to_window(t_cub *cub, bool actualise)
 			cub->mini_map.height) == false)
 			exit((print_error(RESIZE), free_in_window(cub), EXIT_FAILURE));
 	}
-	if (-1 == mlx_image_to_window(cub->mlx, cub->mini_map.background_i, WIDTH - \
-		cub->mini_map.width, 0))
+	if (-1 == mlx_image_to_window(cub->mlx, cub->mini_map.background_i, \
+		cub->width - cub->mini_map.width, 0))
 		exit((print_error(WINDOW), free_in_window(cub), EXIT_FAILURE));
 	put_wall(cub->map, cub);
 	return (0);

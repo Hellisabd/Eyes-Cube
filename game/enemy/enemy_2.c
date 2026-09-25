@@ -18,7 +18,7 @@ void	maths_enemy_2(t_cub *cub)
 		(cub->fov / cub->n));
 	cub->enemy.ratio_width = (float)cub->enemy.enemy_i[0]->width / \
 		(float)cub->enemy.max_rays;
-	cub->enemy.start = ((int)cub->enemy.ratio - HEIGHT) / 2;
+	cub->enemy.start = ((int)cub->enemy.ratio - cub->height) / 2;
 	if (cub->enemy.start < 0)
 		cub->enemy.start = 0;
 }
@@ -29,7 +29,7 @@ void	maths_enemy(t_cub *cub)
 	cub->enemy.d_y = cub->p_y - cub->e_y;
 	cub->enemy.dist = fabs(sqrt((cub->enemy.d_x * cub->enemy.d_x) + \
 		(cub->enemy.d_y * cub->enemy.d_y)));
-	cub->enemy.ratio = HEIGHT / cub->enemy.dist;
+	cub->enemy.ratio = cub->height / cub->enemy.dist;
 	cub->enemy.ratio_height = (float)cub->enemy.enemy_i[0]->height / \
 		cub->enemy.ratio;
 	if (cub->p_x >= cub->e_x && cub->p_y >= cub->e_y)
@@ -57,7 +57,7 @@ void	clear_npc_layer(t_cub *cub, int x)
 	int	y;
 
 	y = 0;
-	while (y < HEIGHT)
+	while (y < cub->height)
 	{
 		mlx_put_pixel(cub->world.npc, x, y, 0);
 		y++;
@@ -66,13 +66,13 @@ void	clear_npc_layer(t_cub *cub, int x)
 
 void	put_enemy_2(t_cub *cub, int x, int y)
 {
-	while (y < HEIGHT)
+	while (y < cub->height)
 	{
 		mlx_put_pixel(cub->world.npc, x, y, 0);
 		y++;
 	}
 	cub->n_ray++;
-	if (cub->n_ray >= cub->enemy.max_rays * 3)
+	if (cub->n_ray >= cub->enemy.max_rays * cub->col_ratio)
 		cub->n_ray = 0;
 }
 
@@ -86,17 +86,18 @@ void	put_enemy(t_cub *cub, t_ray *ray, int x)
 		- 2 * PI && ray->angle <= cub->enemy.theta2 - 2 * PI)))
 	{
 		y = 0;
-		while (y < (HEIGHT - cub->enemy.ratio + 50) / 2)
+		while (y < (cub->height - cub->enemy.ratio + cub->height / 30) / 2)
 		{
 			mlx_put_pixel(cub->world.npc, x, y, 0);
 			y++;
 		}
 		while ((int)floor(cub->enemy.line_tab) < \
-			(int)cub->enemy.enemy_i[0]->height && y < HEIGHT)
+			(int)cub->enemy.enemy_i[0]->height && y < cub->height)
 		{
 			mlx_put_pixel(cub->world.npc, x, y, \
-				(int)cub->enemy.pix_enemy[(int)(floor)(cub->n_ray / 3 * \
-				cub->enemy.ratio_width)][(int)floor(cub->enemy.line_tab)]);
+				(int)cub->enemy.pix_enemy[(int)floor(cub->n_ray / \
+				cub->col_ratio * cub->enemy.ratio_width)] \
+				[(int)floor(cub->enemy.line_tab)]);
 			y++;
 			cub->enemy.line_tab += cub->enemy.ratio_height;
 		}

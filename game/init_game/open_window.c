@@ -61,15 +61,12 @@ void	ft_hook(void *param)
 
 void	ft_cursor(t_cub *cub)
 {
-	mlx_set_cursor_mode(cub->mlx, MLX_MOUSE_HIDDEN);
+	mlx_set_cursor_mode(cub->mlx, MLX_MOUSE_DISABLED);
 	cub->status = 1;
 }
 
 void	init_pos_count(t_cub *cub)
 {
-	set_player_pos(cub);
-	set_enemy_pos(cub);
-	set_exit_pos(cub);
 	cub->n_enemy = count_c(cub->map, 'A');
 	cub->n_exit = count_c(cub->map, 'X');
 	if (cub->n_enemy > 1)
@@ -83,13 +80,12 @@ void	init_pos_count(t_cub *cub)
 void	open_window(t_cub *cub)
 {
 	cub->stamina = 100;
-	init_data_mini_map(&cub->mini_map, cub->map);
 	init_pos_count(cub);
-	cub->mlx = mlx_init(WIDTH, HEIGHT, "cub3D", true);
-	if (!cub->mlx)
-		exit((print_error("Initializing MLX!\n"), EXIT_FAILURE));
-	mlx_set_window_pos(cub->mlx, 500, 250);
-	mlx_set_window_limit(cub->mlx, WIDTH, HEIGHT, WIDTH, HEIGHT);
+	init_mlx_window(cub);
+	init_data_mini_map(&cub->mini_map, cub->map, cub->height);
+	set_player_pos(cub);
+	set_enemy_pos(cub);
+	set_exit_pos(cub);
 	ft_cursor(cub);
 	init_raycast(cub);
 	lets_go_3d(cub);
@@ -97,7 +93,7 @@ void	open_window(t_cub *cub)
 	raycasting(cub);
 	map_to_window(cub, false);
 	draw_ray(&cub->ray, &cub->mini_map, cub, H_RED);
-	mlx_set_mouse_pos(cub->mlx, WIDTH / 2, HEIGHT / 2);
+	mlx_set_mouse_pos(cub->mlx, cub->width / 2, cub->height / 2);
 	fog(cub);
 	mlx_key_hook(cub->mlx, interaction, cub);
 	mlx_loop_hook(cub->mlx, ft_hook, (void *)cub);

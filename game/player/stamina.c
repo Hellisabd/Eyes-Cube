@@ -29,29 +29,25 @@ void	stam_handling(t_cub *cub)
 
 void	put_stamina(t_cub *cub)
 {
-	int	n;
 	int	x;
 	int	y;
+	int	left;
+	int	full;
 
-	n = 200;
-	y = 100;
-	x = 100;
-	while (n-- >= cub->stamina)
+	left = cub->width / 30;
+	full = left + cub->stamina * cub->width / 500;
+	x = left;
+	while (x < left + cub->width / 5)
 	{
-		if (n == cub->stamina)
+		y = cub->height / 15;
+		while (y < cub->height / 15 + cub->height / 50)
 		{
-			while (x++ < 700 - (6 * (100 - n)))
-			{
-				y = 100;
-				while (y < 130)
-					mlx_put_pixel(cub->world.hud, x, y++, H_YELLOW);
-			}
-			while (x++ < 700)
-			{
-				y = 100;
-				while (y < 130)
-					mlx_put_pixel(cub->world.hud, x, y++, H_YELLOW2);
-			}
+			if (x < full)
+				mlx_put_pixel(cub->world.hud, x, y, H_YELLOW);
+			else
+				mlx_put_pixel(cub->world.hud, x, y, H_YELLOW2);
+			y++;
 		}
+		x++;
 	}
 }

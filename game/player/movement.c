@@ -53,9 +53,9 @@ void	rotations(double xpos, double ypos, void *param)
 	if (cub->status == 1)
 	{
 		mlx_get_mouse_pos(cub->mlx, &x, &y);
-		if (x != WIDTH / 2)
-			cub->rot += (x - (WIDTH / 2)) * 0.0001 * SENSI;
-		mlx_set_mouse_pos(cub->mlx, WIDTH / 2, HEIGHT / 2);
+		if (x != cub->width / 2)
+			cub->rot += (x - (cub->width / 2)) * 0.00005 * SENSI;
+		mlx_set_mouse_pos(cub->mlx, cub->width / 2, cub->height / 2);
 	}
 }
 

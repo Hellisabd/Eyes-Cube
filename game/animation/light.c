@@ -18,10 +18,11 @@ int	init_light(t_cub *cub)
 	if (cub->anim.light_t == NULL)
 		exit((print_error(LOADING), free_in_window(cub), EXIT_FAILURE));
 	cub->anim.light_i = mlx_texture_to_image(cub->mlx, cub->anim.light_t);
-	if (mlx_resize_image(cub->anim.light_i, WIDTH / 4, HEIGHT / 3) == false)
+	if (mlx_resize_image(cub->anim.light_i, cub->width / 4, \
+		cub->height / 3) == false)
 		exit((print_error(RESIZE), free_in_window(cub), EXIT_FAILURE));
-	if (mlx_image_to_window(cub->mlx, cub->anim.light_i, WIDTH / 2 + \
-		WIDTH / 10, HEIGHT - (HEIGHT / 3)) == -1)
+	if (mlx_image_to_window(cub->mlx, cub->anim.light_i, cub->width / 2 + \
+		cub->width / 10, cub->height - (cub->height / 3)) == -1)
 		exit((print_error(WINDOW), free_in_window(cub), EXIT_FAILURE));
 	return (0);
 }
@@ -31,9 +32,9 @@ void	moving_light(t_cub *cub)
 	int	n;
 
 	if (cub->sprint == true)
-		n = HEIGHT / 50;
+		n = cub->height / 50;
 	else if (cub->sprint == false)
-		n = HEIGHT / 100;
+		n = cub->height / 100;
 	if (cub->anim.i_light == 0)
 		cub->anim.light_i->instances[0].y += n;
 	if (cub->anim.i_light == 1)

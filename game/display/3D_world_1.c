@@ -24,14 +24,14 @@ void	put_wall_in3d(t_wall *wall, t_cub *cub, mlx_image_t *image, \
 	else
 		wall->ratio_width = wall->ray->x - floor(wall->ray->x);
 	wall->ratio_height = (float)image->height / (float)wall->img_height;
-	start = (wall->img_height - HEIGHT) / 2;
+	start = (wall->img_height - cub->height) / 2;
 	if (start < 0)
 		start = 0;
 	line_tab = start * wall->ratio_height;
 	column_tab = (int)(wall->ratio_width * image->width) - 1;
 	if (column_tab < 0)
 		column_tab = 0;
-	while ((int)floor(line_tab) < (int)image->height && wall->y < HEIGHT)
+	while ((int)floor(line_tab) < (int)image->height && wall->y < cub->height)
 	{
 		mlx_put_pixel(cub->world.background_i, wall->x, wall->y, \
 		(int)pixel_tab[column_tab][(int)floor(line_tab)]);
@@ -46,9 +46,10 @@ void	disp_world(t_cub *cub, t_ray *ray, int x)
 
 	wall.y = 0;
 	wall.ray = ray;
-	wall.img_height = (int)(HEIGHT / ray->hyp * cos(ray->angle - cub->rot));
+	wall.img_height = (int)(cub->height / ray->hyp \
+		* cos(ray->angle - cub->rot));
 	wall.x = x;
-	while (wall.y <= (HEIGHT - wall.img_height) / 2)
+	while (wall.y <= (cub->height - wall.img_height) / 2)
 	{
 		mlx_put_pixel(cub->world.background_i, x, wall.y, cub->map->c_h);
 		wall.y++;
@@ -60,7 +61,7 @@ void	disp_world(t_cub *cub, t_ray *ray, int x)
 		ray->door = false;
 	}
 	disp_world_2(cub, ray, &wall);
-	while (wall.y < HEIGHT)
+	while (wall.y < cub->height)
 	{
 		mlx_put_pixel(cub->world.background_i, x, wall.y, cub->map->f_h);
 		wall.y++;
@@ -69,25 +70,27 @@ void	disp_world(t_cub *cub, t_ray *ray, int x)
 
 void	draw_walls(t_cub *cub, t_ray *ray)
 {
-	int	ratio;
+	int	next;
 	int	i;
 
 	i = -1;
-	ratio = WIDTH / cub->n;
+	next = 0;
+	cub->col_ratio = cub->width / cub->n;
 	cub->n_ray = 0;
 	cub->exit.n_ray = 0;
 	if (cub->n_enemy == 1)
 		maths_enemy(cub);
 	if (cub->n_exit == 1)
 		maths_exit(cub);
-	while (++i < WIDTH && ray)
+	while (++i < cub->width && ray)
 	{
-		if (i % ratio == 0)
+		while (ray && next <= (int)(i / cub->col_ratio))
 		{
 			ray = ray->next;
-			if (!ray)
-				break ;
+			next++;
 		}
+		if (!ray)
+			break ;
 		disp_world(cub, ray, i);
 		if (cub->n_exit == 1)
 			put_exit(cub, ray, i);
@@ -105,16 +108,16 @@ int	lets_go_3d(t_cub *cub)
 	init_death(cub);
 	if (cub->n_exit == 1)
 		init_exit(cub);
-	cub->world.background_i = mlx_new_image(cub->mlx, WIDTH, HEIGHT);
+	cub->world.background_i = mlx_new_image(cub->mlx, cub->width, cub->height);
 	if (mlx_image_to_window(cub->mlx, cub->world.background_i, 0, 0) == -1)
 		exit((print_error(WINDOW), free_in_window(cub), EXIT_FAILURE));
-	cub->world.npc = mlx_new_image(cub->mlx, WIDTH, HEIGHT);
+	cub->world.npc = mlx_new_image(cub->mlx, cub->width, cub->height);
 	if (mlx_image_to_window(cub->mlx, cub->world.npc, 0, 0) == -1)
 		exit((print_error(WINDOW), free_in_window(cub), EXIT_FAILURE));
-	cub->world.fog = mlx_new_image(cub->mlx, WIDTH, HEIGHT);
+	cub->world.fog = mlx_new_image(cub->mlx, cub->width, cub->height);
 	if (mlx_image_to_window(cub->mlx, cub->world.fog, 0, 0) == -1)
 		exit((print_error(WINDOW), free_in_window(cub), EXIT_FAILURE));
-	cub->world.hud = mlx_new_image(cub->mlx, WIDTH, HEIGHT);
+	cub->world.hud = mlx_new_image(cub->mlx, cub->width, cub->height);
 	if (mlx_image_to_window(cub->mlx, cub->world.hud, 0, 0) == -1)
 		exit((print_error(WINDOW), free_in_window(cub), EXIT_FAILURE));
 	return (0);

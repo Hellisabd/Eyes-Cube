@@ -20,7 +20,7 @@ int	init_death(t_cub *cub)
 	cub->anim.death_i = mlx_texture_to_image(cub->mlx, cub->anim.death_t);
 	if (!cub->anim.death_i)
 		exit((free_in_window(cub), 1));
-	if (mlx_resize_image(cub->anim.death_i, WIDTH, HEIGHT) == false)
+	if (mlx_resize_image(cub->anim.death_i, cub->width, cub->height) == false)
 		exit((print_error(RESIZE), free_in_window(cub), EXIT_FAILURE));
 	return (0);
 }

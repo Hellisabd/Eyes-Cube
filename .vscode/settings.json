@@ -11,5 +11,6 @@
 		"cmath": "c",
 		"random": "c",
 		"numbers": "c"
-	}
+	},
+	"cmake.sourceDirectory": "/home/hellisabd/Documents/42/Eyes-Cube/MLX42"
 }

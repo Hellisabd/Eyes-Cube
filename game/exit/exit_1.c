@@ -22,7 +22,7 @@ void	init_exit(t_cub *cub)
 		exit((print_error(LOADING), free_in_window(cub), EXIT_FAILURE));
 	cub->exit.exit_i = mlx_texture_to_image(cub->mlx, cub->exit.exit_t);
 	cub->exit.success_i = mlx_texture_to_image(cub->mlx, cub->exit.success_t);
-	if (mlx_resize_image(cub->exit.success_i, WIDTH, HEIGHT) == false)
+	if (mlx_resize_image(cub->exit.success_i, cub->width, cub->height) == false)
 		exit((print_error(RESIZE), free_in_window(cub), EXIT_FAILURE));
 	cub->exit.tab_exit = image_to_tab(cub->exit.exit_i);
 }

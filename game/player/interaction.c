@@ -34,7 +34,7 @@ void	interaction(mlx_key_data_t key, void *param)
 	}
 	else if (key.key == MLX_KEY_B && key.action == 1 && cub->status == 0)
 	{
-		mlx_set_cursor_mode(cub->mlx, MLX_MOUSE_HIDDEN);
+		mlx_set_cursor_mode(cub->mlx, MLX_MOUSE_DISABLED);
 		cub->status = 1;
 	}
 }

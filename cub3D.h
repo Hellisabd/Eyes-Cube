@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amirloup <amirloup@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hellisabd <hellisabd@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:41:01 by bgrosjea          #+#    #+#             */
-/*   Updated: 2024/08/07 15:50:10 by amirloup         ###   ########.fr       */
+/*   Updated: 2026/09/23 13:47:58 by hellisabd        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define SENSI 5
+# define SENSI 0.5
 
 # define NC "\e[0m"
 # define RED "\e[1;31m"
@@ -63,8 +63,6 @@
 # include "MLX42/include/MLX42/MLX42.h"
 
 # define PI		3.14159265358979323846
-# define WIDTH 3000
-# define HEIGHT 1500
 
 # define RIGHT 0
 # define LEFT 1
@@ -318,6 +316,7 @@ typedef struct s_cub
 	float			next_x;
 	float			next_y;
 	float			n;
+	float			col_ratio;
 	float			fov;
 	float			p_x;
 	float			p_y;
@@ -338,6 +337,8 @@ typedef struct s_cub
 	size_t			n_exit;
 	int				n_ray;
 	int				status;
+	int				width;
+	int				height;
 	t_mini_map		mini_map;
 	t_world			world;
 	t_player		player;
@@ -351,6 +352,7 @@ typedef struct s_cub
 
 void	open_window(t_cub *cub);
 void	init_all(t_cub *cub);
+void	init_mlx_window(t_cub *cub);
 
 // PARSING
 
@@ -379,7 +381,7 @@ void	fourth_quadrant(t_cub *cub, int *i, int *j);
 // MINIMAP
 
 int		map_to_window(t_cub *cub, bool actualise);
-int		init_data_mini_map(t_mini_map *minimap, t_map *map);
+int		init_data_mini_map(t_mini_map *minimap, t_map *map, int win_h);
 int		init_mini_map(t_cub *cub, t_mini_map *mini_map);
 
 // GAME
